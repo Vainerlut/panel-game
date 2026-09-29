@@ -1,6 +1,7 @@
 local Scene = require("client.src.scenes.Scene")
 local class = require("common.lib.class")
 local ui = require("client.src.ui")
+local input = require("client.src.inputManager")
 local tableUtils = require("common.lib.tableUtils")
 
 -- Scene for selecting a sub-character variant from a bundle character
@@ -163,6 +164,16 @@ end
 function SubCharacterSelectScene:update(dt)
   self.backgroundImg:update(dt)
   self.uiRoot:update(dt)
+
+  -- Forward keyboard/gamepad inputs to the grid cursor
+  -- This mirrors the pattern from CharacterSelect:updateSelf(dt)
+  if self.player.isLocal and self.player.human then
+    if not self.player.inputConfiguration then
+      self.gridCursor:receiveInputs(input, dt)
+    elseif self.player.settings.inputMethod == "controller" then
+      self.gridCursor:receiveInputs(self.player.inputConfiguration, dt)
+    end
+  end
 end
 
 function SubCharacterSelectScene:draw()
