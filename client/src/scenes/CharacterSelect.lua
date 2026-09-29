@@ -10,6 +10,7 @@ local GraphicsUtil = require("client.src.graphics.graphics_util")
 local Character = require("client.src.mods.Character")
 local LevelPresets = require("common.data.LevelPresets")
 local InputDeviceOverlay = require("client.src.scenes.components.InputDeviceOverlay")
+local SubCharacterSelectScene = require("client.src.scenes.SubCharacterSelectScene")
 
 -- The character select screen scene
 ---@class CharacterSelect : Scene
@@ -423,6 +424,17 @@ function CharacterSelect:getCharacterButtons()
       end
 
       if character then
+        if character:isBundle() and #character:getSubMods() > 0 then
+          -- bundle character: push sub-character selection scene
+          character:playSelectionSfx()
+          GAME.navigationStack:push(SubCharacterSelectScene({
+            bundleCharacter = character,
+            player = player,
+            battleRoom = self.battleRoom,
+          }))
+          return
+        end
+
         if character:canSuperSelect() and holdTime > consts.SUPER_SELECTION_START + consts.SUPER_SELECTION_DURATION then
           -- super select
           if character.panels and panels[character.panels] then
