@@ -109,6 +109,7 @@ function SubCharacterSelectScene:load()
       end
       player:setCharacter(selfElement.characterId)
       player.cursor = self.originalCursor
+      characters[selfElement.characterId]:playSelectionSfx()
       GAME.theme:playValidationSfx()
       GAME.navigationStack:pop()
       if self.onComplete then
