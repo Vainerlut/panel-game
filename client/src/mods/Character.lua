@@ -201,6 +201,12 @@ function Character.loadDefaultMod()
   default_character:load(true)
 end
 
+---Accessor for the default character that holds the fallback assets
+---@return Character? defaultCharacter
+function Character.getDefaultCharacter()
+  return default_character
+end
+
 local function loadRandomCharacter(visibleCharacters)
   local randomCharacter = Character("characters/__default", consts.RANDOM_CHARACTER_SPECIAL_VALUE)
   randomCharacter.images["icon"] = themes[config.theme].images.IMG_random_character
